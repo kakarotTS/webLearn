@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		.container{
+			position: relative;
+		}
+		.container div{
+			position: absolute;
+			width: 50px;
+			height: 50px;
+			background: red;
+		}
+	</style>
+</head>
+<body>
+	<input type="button" value="坍塌"/>
+	<div class = "container" id = "container"></div>
+	<script>
+		var container = document.getElementById('container');
+		var btnCollapse = document.getElementsByTagName("input")[0];
+		var divArr = container.getElementsByTagName("div");
+		var str = "";
+		var timer = null;
+		var num = 0;
+		for(var i = 0;i < 10;i++){
+			str += "<div style='left: "+ i*60 +"px'></div>";
+		}
+		container.innerHTML = str;
+		btnCollapse.addEventListener("click",function(){
+			timer = setInterval(function(){
+				if(num >= 10){
+					clearInterval(timer);
+				}else{
+					moveTo(divArr[num],"top",12,500);
+				}
+				num++;
+			},100)
+		});
+
+		/*
+			param:obj	dom对象
+			param:attr	移动属性(top,bottom......)
+			param:dir   步长（每次移动多少）
+			param:target	目的距离
+		*/
+		function moveTo(obj,attr,dir,target){
+			var distance = getComputedStyle(obj)[attr];
+			distance = parseInt(distance);
+			obj.timer = setInterval(function(){
+				distance += dir;
+				if(distance > target){
+					distance = target;
+					clearInterval(obj.timer);
+				}else{
+					obj.style[attr] = distance+"px";
+				}
+			},20)
+
+		}
+
+	</script>
+</body>
+</html>
